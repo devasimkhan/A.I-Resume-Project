@@ -28,7 +28,7 @@ app.get("/" , (req , res) => {
 //auth routes
 app.use("/api/auth" , authRoutes)
 // admin routes
-app.use("/api/auth" , adminRoutes)
+app.use("/api/admin" , adminRoutes)
 // credits Routes
 app.use("/api/auth" , creditsRoutes)
 

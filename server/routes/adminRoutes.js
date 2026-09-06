@@ -9,6 +9,8 @@ const router = express.Router()
 router.get("/users" , protect.protectForAdmin , adminControllers.getAllUser)
 router.get("/credits" , protect.protectForAdmin , adminControllers.getAllCreditsRequests)
 
+router.put("/credit/:rid" , protect.protectForAdmin , adminControllers.updateCreditRequest)
+
 
 
 

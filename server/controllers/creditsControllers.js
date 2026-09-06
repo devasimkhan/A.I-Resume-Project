@@ -1,4 +1,5 @@
 import CreditsRequest from "../models/creditsModel.js";
+import User from "../models/userModel.js";
 
 const creditsRequest = async (req, res) => {
   const userId = req.user.id;
@@ -8,11 +9,6 @@ const creditsRequest = async (req, res) => {
   if (!credits || !reason) {
     res.status(400);
     throw new Error("Please enter all details");
-  }
-
-  if (credits < 1) {
-    res.status(400);
-    throw new Error("Credits must be at least 1");
   }
 
   // Check existing pending request
@@ -43,8 +39,28 @@ const creditsRequest = async (req, res) => {
   });
 };
 
-const creditsControllers = {
-  creditsRequest,
+const getCreditsHistory = async (req, res) => {
+  try {
+    const userId = req.params.rid;
+    const getHistory = await CreditsRequest.find({ user: userId }).populate(
+      "user",
+      "-password",
+    );
+    if (getHistory.length === 0) {
+      res.status(404);
+      throw new Error("Credits history not found");
+    }
+    return res.status(200).json(getHistory);
+  } catch (error) {
+    res.status(409);
+    throw new Error("Credits Fetch Failed");
+  }
 };
 
-export default creditsControllers;
+
+const creditsControllers = {
+  creditsRequest,
+  getCreditsHistory,
+};
+
+export default creditsControllers

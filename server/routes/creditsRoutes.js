@@ -7,6 +7,7 @@ const router = express.Router()
 
 
 router.post("/credit" , protect.protectForUser , creditsControllers.creditsRequest)
+router.get("/history/:rid" , protect.protectForUser , creditsControllers.getCreditsHistory)
 
 
 

@@ -25,8 +25,7 @@ const creditsSchema = new mongoose.Schema(
       enum: ["pending", "granted", "rejected"],
       default: "pending",
     },
-
-    processedBy: {
+   processedBy: {
   type: mongoose.Schema.Types.ObjectId,
   ref: "User",
   default: null,
