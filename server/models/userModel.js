@@ -24,12 +24,12 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default : "STUDENT"
     },
-    credits: {
-      type: Number,
-      default: 30,
-      required: true,
-      trim: true,
-    },
+  credits: {
+  type: Number,
+  default: 10,
+  min: 0,
+  required: true,
+},
     location : {
         type : String ,
          required : [true , "Enter Your Location!"]

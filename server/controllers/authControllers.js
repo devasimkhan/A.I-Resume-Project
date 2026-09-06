@@ -1,4 +1,4 @@
-import User from "../models/userModels.js";
+import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jtw from "jsonwebtoken"
 

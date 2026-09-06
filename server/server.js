@@ -2,9 +2,11 @@ import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
 import colors from "colors"
-import authRoutes from "./routes/authRoutes.js"
 import connectDB from "./config/dbConfig.js"
 import errorHandler from "./middleware/errorHandler.js"
+import authRoutes from "./routes/authRoutes.js"
+import adminRoutes from "./routes/adminRoutes.js"
+import creditsRoutes from "./routes/creditsRoutes.js"
 
 
 const app = express()
@@ -23,8 +25,12 @@ app.get("/" , (req , res) => {
         message : " WELCOME TO A-I RESUME API's"
     })
 })   
- 
+//auth routes
 app.use("/api/auth" , authRoutes)
+// admin routes
+app.use("/api/auth" , adminRoutes)
+// credits Routes
+app.use("/api/auth" , creditsRoutes)
 
 
 
