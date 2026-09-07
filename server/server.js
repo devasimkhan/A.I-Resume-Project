@@ -7,6 +7,7 @@ import errorHandler from "./middleware/errorHandler.js"
 import authRoutes from "./routes/authRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
 import creditsRoutes from "./routes/creditsRoutes.js"
+import careerRoutes from "./routes/careerRoutes.js"
 
 
 const app = express()
@@ -17,7 +18,7 @@ const PORT  = process.env.PORT || 3001
 
 
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({extended: true}))
 
 
 app.get("/" , (req , res) => {
@@ -31,6 +32,9 @@ app.use("/api/auth" , authRoutes)
 app.use("/api/admin" , adminRoutes)
 // credits Routes
 app.use("/api/auth" , creditsRoutes)
+
+// career Routes
+app.use("/api/auth" , careerRoutes)
 
 
 

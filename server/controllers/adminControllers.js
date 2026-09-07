@@ -31,44 +31,59 @@ const updateCreditRequest = async (req, res) => {
   try {
     const { status } = req.body;
 
-    // Credit request ki ID
     const request = await CreditsRequest.findById(req.params.rid);
 
     if (!request) {
-      res.status(404);
-      throw new Error("Request Is Not Found");
+      return res.status(404).json({
+        message: "Request Is Not Found",
+      });
     }
 
-    // JIS USER NE REQUEST KI HAI
+    // Request already processed hai
+    if (request.status !== "pending") {
+      return res.status(400).json({
+        message: "Request already processed",
+      });
+    }
+
+    // Only valid status
+    if (status !== "granted" && status !== "rejected") {
+      return res.status(400).json({
+        message: "Invalid status",
+      });
+    }
+
+    // Request karne wala user
     const user = await User.findById(request.user);
 
     if (!user) {
-      res.status(404);
-      throw new Error("User Is Not Found");
+      return res.status(404).json({
+        message: "User Is Not Found",
+      });
     }
 
-    // Admin ne grant kiya
+    // Grant hone par credits add
     if (status === "granted") {
       user.credits = user.credits + request.credits;
-
       await user.save();
     }
 
-    // Request ka status update
+    // Request update
     request.status = status;
 
-    // Kis admin ne approve/reject kiya
+    // Admin ki ID
     request.processedBy = req.user.id;
 
     await request.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Credit request updated successfully",
       request,
+      credits: user.credits,
     });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: "Credit request update failed",
       error: error.message,
     });
