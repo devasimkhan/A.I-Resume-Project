@@ -1,3 +1,4 @@
+import Career from "../models/careerModel.js";
 import CreditsRequest from "../models/creditsModel.js";
 import User from "../models/userModel.js";
 
@@ -13,83 +14,107 @@ const getAllUser = async (req, res) => {
 };
 
 
-const getAllCreditsRequests = async(req, res) => {
+const getAllCreditsRequests = async (req, res) => {
+  try {
+    const requests = await CreditsRequest
+      .find()
+      .populate("user", "-password");
 
-const getRequest = await CreditsRequest.find().populate("user")
-if(!getRequest){
+    if (requests.length === 0) {
+      return res.status(404).json({
+        message: "Credit requests not found",
+      });
+    }
 
-  req.status(404)
-  throw new Error("Credits Request Is Not Found");
-  
-}
+    return res.status(200).json(requests);
 
-res.status(200).json(getRequest)
-
-}
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to get credit requests",
+      error: error.message,
+    });
+  }
+};
 
 const updateCreditRequest = async (req, res) => {
   try {
-    const { status } = req.body;
+ 
+    if (status !== "granted" && status !== "rejected") {
+      return res.status(400).json({
+        message: "Status must be granted or rejected",
+      });
+    }
 
-    const request = await CreditsRequest.findById(req.params.rid);
+  
+    const request = await CreditsRequest.findById(rid);
 
     if (!request) {
       return res.status(404).json({
-        message: "Request Is Not Found",
+        message: "Credit request not found",
       });
     }
 
-    // Request already processed hai
+    // 3. Already processed check
     if (request.status !== "pending") {
       return res.status(400).json({
-        message: "Request already processed",
+        message: "Credit request already processed",
       });
     }
 
-    // Only valid status
-    if (status !== "granted" && status !== "rejected") {
-      return res.status(400).json({
-        message: "Invalid status",
-      });
-    }
-
-    // Request karne wala user
+    // 4. User find
     const user = await User.findById(request.user);
 
     if (!user) {
       return res.status(404).json({
-        message: "User Is Not Found",
+        message: "User not found",
       });
     }
 
-    // Grant hone par credits add
+    // 5. If granted → add credits
     if (status === "granted") {
-      user.credits = user.credits + request.credits;
+      user.credits += request.credits;
+
       await user.save();
     }
 
-    // Request update
+    // 6. Update request
     request.status = status;
-
-    // Admin ki ID
     request.processedBy = req.user.id;
 
     await request.save();
 
+    // 7. Response
     return res.status(200).json({
-      message: "Credit request updated successfully",
+      message: `Credit request ${status} successfully`,
       request,
-      credits: user.credits,
+      currentCredits: user.credits,
     });
 
   } catch (error) {
+    console.error("UPDATE CREDIT ERROR:", error);
+
     return res.status(500).json({
       message: "Credit request update failed",
       error: error.message,
     });
   }
 };
+const getCareer = async(req, res) => {
 
-const adminControllers = {getAllUser , getAllCreditsRequests , updateCreditRequest}
+  const career = await Career.find().populate("user")
+
+  if(!career){
+
+    res.status(404)
+    throw new Error("Career Is Not Found");
+    
+  }
+  res.status(200).json(career)
+
+}
+
+
+ 
+const adminControllers = {getAllUser , getAllCreditsRequests , updateCreditRequest , getCareer}
 
 export default adminControllers

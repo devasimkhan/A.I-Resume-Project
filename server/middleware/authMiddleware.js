@@ -43,7 +43,7 @@ const protectForAdmin = async (req, res, next) => {
       if (!user) {
         res.status(401);
         throw new Error("User not found");
-      }
+      }                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
       if (user.userType == "ADMIN") {
         res.status(401);
