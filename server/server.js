@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
 import creditsRoutes from "./routes/creditsRoutes.js"
 import careerRoutes from "./routes/careerRoutes.js"
+import resumeRoutes from "./routes/resumeRoutes.js";
 
 
 const app = express()
@@ -36,7 +37,7 @@ app.use("/api/auth" , creditsRoutes)
 // career Routes
 app.use("/api/auth" , careerRoutes)
 
-
+app.use("/api/auth", resumeRoutes);
 
 app.use(errorHandler)
 app.listen(PORT , () => {
