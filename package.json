@@ -8,7 +8,8 @@
   "main": "server.js",
   "scripts": {
     "server": "node server/server.js",
-    "dev": "node --watch server/server.js"
+    "dev": "node --watch server/server.js" ,
+    "seedJobs": "node server/seedJobs.js"
   },
   "dependencies": {
     "@google/genai": "^2.22.0",

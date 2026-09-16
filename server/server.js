@@ -9,7 +9,8 @@ import adminRoutes from "./routes/adminRoutes.js"
 import creditsRoutes from "./routes/creditsRoutes.js"
 import careerRoutes from "./routes/careerRoutes.js"
 import resumeRoutes from "./routes/resumeRoutes.js";
-
+import jobMatching from "./routes/jobMatching.js"
+import recommendedJobsRoutes from "./routes/recommendedJobsRoutes.js";
 
 const app = express()
 
@@ -38,6 +39,8 @@ app.use("/api/auth" , creditsRoutes)
 app.use("/api/auth" , careerRoutes)
 
 app.use("/api/auth", resumeRoutes);
+app.use("/api", jobMatching);
+app.use("/api", recommendedJobsRoutes);
 
 app.use(errorHandler)
 app.listen(PORT , () => {

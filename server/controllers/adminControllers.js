@@ -1,6 +1,8 @@
 import Career from "../models/careerModel.js";
 import CreditsRequest from "../models/creditsModel.js";
 import User from "../models/userModel.js";
+import Job from "../models/jobModel.js";
+import Resume from "../models/resumeModel.js";
 
 const getAllUser = async (req, res) => {
   const allUser = await User.find();
@@ -113,8 +115,136 @@ const getCareer = async(req, res) => {
 
 }
 
+const getAllResume = async(req, res)=> {
 
- 
-const adminControllers = {getAllUser , getAllCreditsRequests , updateCreditRequest , getCareer}
+  const resumes = await Resume.find().populate("user") 
+
+  if(!resumes){
+    res.status(404)
+    throw new Error("Resume Is Not Found");
+    
+  }
+  res.status(200).json({
+    success : true ,
+    count : resumes.length ,
+    resumes
+  })
+}
+
+
+export const createJob = async (req, res, next) => {
+    try {
+        const {
+            title,
+            company,
+            location,
+            jobType,
+            experience,
+            skills,
+            description
+        } = req.body;
+
+        if (
+            !title ||
+            !company ||
+            !location ||
+            !jobType ||
+            experience === undefined ||
+            !skills ||
+            !description
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
+        }
+
+        const job = await Job.create({
+            title,
+            company,
+            location,
+            jobType,
+            experience,
+            skills,
+            description
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Job created successfully",
+            job
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+ const getAllJobs = async (req, res, next) => {
+    try {
+        const jobs = await Job.find();
+
+        res.status(200).json({
+            success: true,
+            count: jobs.length,
+            jobs
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+ const updateJob = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const job = await Job.findByIdAndUpdate(
+            id,
+            req.body,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!job) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Job updated successfully",
+            job
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+ const deleteJob = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const job = await Job.findByIdAndDelete(id);
+
+        if (!job) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Job deleted successfully"
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+const adminControllers = {getAllUser , getAllCreditsRequests , updateCreditRequest , getCareer ,  getAllResume ,createJob , getAllJobs , updateJob , deleteJob}
 
 export default adminControllers
