@@ -25,10 +25,38 @@ const resumeSchema = new mongoose.Schema(
       type: String,
     },
 
+    // AI Scores
     atsScore: {
       type: Number,
+      min: 0,
+      max: 100,
     },
 
+    skillsMatchScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+
+    jobMatchScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+
+    resumeQualityScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+
+    overallScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+
+    // AI Analysis
     aiAnalysis: {
       type: mongoose.Schema.Types.Mixed,
     },

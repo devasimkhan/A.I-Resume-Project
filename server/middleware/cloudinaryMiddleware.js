@@ -36,5 +36,5 @@ const uploadToCloudinary = async (fileLink) => {
         return null;
     }
 };
-
+export { cloudinary };  
 export default uploadToCloudinary;

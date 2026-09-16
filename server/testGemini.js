@@ -17,7 +17,17 @@ const test = async () => {
             B.Sc. Mathematics
         `);
 
+        console.log("AI Result:");
         console.log(result);
+
+        const overallScore = Math.round(
+            (result.atsScore * 0.30) +
+            (result.skillsMatchScore * 0.30) +
+            (result.jobMatchScore * 0.20) +
+            (result.resumeQualityScore * 0.20)
+        );
+
+        console.log("\nOverall Score:", overallScore);
 
     } catch (error) {
         console.error(error);
