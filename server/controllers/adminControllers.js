@@ -41,6 +41,9 @@ const getAllCreditsRequests = async (req, res) => {
 const updateCreditRequest = async (req, res) => {
   try {
  
+     const { status } = req.body;
+    const { rid } = req.params;
+
     if (status !== "granted" && status !== "rejected") {
       return res.status(400).json({
         message: "Status must be granted or rejected",
@@ -101,6 +104,9 @@ const updateCreditRequest = async (req, res) => {
     });
   }
 };
+
+
+
 const getCareer = async(req, res) => {
 
   const career = await Career.find().populate("user")

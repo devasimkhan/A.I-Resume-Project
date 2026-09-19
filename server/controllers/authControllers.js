@@ -29,7 +29,7 @@ const userRegister = async (req, res) => {
   });
 
   if (!user) {
-    rer.status(409);
+    res.status(409);
     throw new Error("User is not Created");
   }
 
@@ -95,16 +95,3 @@ const authControllers = {
 
 export default authControllers;
 
-
-
-
-// export const login=async(req,res)=>{
-//    const {email,password} =req.body 
-//    const user=await User.find({email})
-//    if(!user){
-//     res.status(400).json({
-//       mesaage:"user not5 found"
-//     })
-//    }
-//   return jtw.sign({id} , process.env.JWT_SECRET , {expiresIn: "30d"}) 
-// }
